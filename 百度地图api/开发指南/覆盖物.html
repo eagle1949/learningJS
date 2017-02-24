@@ -1,0 +1,70 @@
+<!DOCTYPE html>  
+<html>  
+<head>  
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />  
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<title>Hello, World</title>  
+<style type="text/css">  
+html{height:100%}  
+body{height:100%;margin:0px;padding:0px}  
+#container{height:100%}  
+</style>  
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=le80IdXynXVOfDwwoHh8OK7FqLm10EaQ">
+//v2.0版本的引用方式：src="http://api.map.baidu.com/api?v=2.0&ak=您的密钥"
+//v1.4版本及以前版本的引用方式：src="http://api.map.baidu.com/api?v=1.4&key=您的密钥&callback=initialize"
+</script>
+</head>  
+ 
+<body>  
+<div id="container"></div> 
+<script type="text/javascript"> 
+//var map = new BMap.Map("container");    
+//var point = new BMap.Point(116.404, 39.915);    
+//map.centerAndZoom(point, 15);    
+//var marker = new BMap.Marker(point);        // 创建标注    
+//map.addOverlay(marker);                     // 将标注添加到地图中
+
+
+var map = new BMap.Map("container");    
+var point = new BMap.Point(116.404, 39.915);    
+map.centerAndZoom(point, 15);  // 编写自定义函数，创建标注   
+var traffic = new BMap.TrafficLayer();        // 创建交通流量图层实例      
+map.addTileLayer(traffic);                    // 将图层添加到地图上
+//anchor 位置，offset偏移
+var opts = {type: BMAP_NAVIGATION_CONTROL_SMALL, anchor: BMAP_ANCHOR_TOP_LEFT,offset: new BMap.Size(150, 5)} 
+map.addControl(new BMap.NavigationControl(opts));
+
+
+function addMarker(point, index){  // 创建图标对象   
+	var myIcon = new BMap.Icon("http://developer.baidu.com/map/jsdemo/img/fox.gif", new BMap.Size(300,157));
+// 创建标注对象并添加到地图   
+ var marker = new BMap.Marker(point, {icon: myIcon});    
+ map.addOverlay(marker);    
+ marker.addEventListener("click", function(){    
+	 alert("您点击了标注");    
+	})
+ marker.enableDragging();    
+marker.addEventListener("dragend", function(e){    
+ alert("当前位置：" + e.point.lng + ", " + e.point.lat);    
+})
+ 
+marker.addEventListener("click", function(e){    
+ alert(e.point.lng + ", " + e.point.lat);    
+});
+}    
+// 随机向地图添加10个标注    
+var bounds = map.getBounds();    
+var lngSpan = bounds.maxX - bounds.minX;  
+var latSpan = bounds.maxY - bounds.minY;    
+for (var i = 0; i < 10; i ++) {    
+ var point = new BMap.Point(116.404 +  (Math.random() * 0.7 + 0.15),    
+                            39.915 + (Math.random() * 0.7 + 0.15));    
+ console.log(point);
+ addMarker(point, i);    
+ //var marker = new BMap.Marker(point);        // 创建标注    
+ //map.addOverlay(marker);    
+}
+
+</script>  
+</body>  
+</html>

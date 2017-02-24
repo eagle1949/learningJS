@@ -1,0 +1,46 @@
+<!DOCTYPE html>  
+<html>  
+<head>  
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />  
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<title>Hello, World</title>  
+<style type="text/css">  
+html{height:100%}  
+body{height:100%;margin:0px;padding:0px}  
+#container{height:100%}  
+</style>  
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=le80IdXynXVOfDwwoHh8OK7FqLm10EaQ">
+//v2.0版本的引用方式：src="http://api.map.baidu.com/api?v=2.0&ak=您的密钥"
+//v1.4版本及以前版本的引用方式：src="http://api.map.baidu.com/api?v=1.4&key=您的密钥&callback=initialize"
+</script>
+</head>  
+ 
+<body>  
+<div id="container"></div> 
+<script type="text/javascript"> 
+	var drawingManager = new BMapLib.DrawingManager(map, {  
+//使用鼠标工具需要引入鼠标工具开源库DrawingManager_min.js及样式文件DrawingManager_min.css  
+        isOpen: false, //是否开启绘制模式  
+        enableDrawingTool: false, //是否显示工具栏  
+        drawingToolOptions: {  
+            anchor: BMAP_ANCHOR_TOP_RIGHT, //位置  
+            offset: new BMap.Size(5, 5), //偏离值  
+            scale: 0.8 //工具栏缩放比例  
+        }  
+});  
+drawingManager.setDrawingMode(BMAP_DRAWING_CIRCLE);  
+drawingManager.open();
+
+drawingManager.addEventListener('circlecomplete', function(e) {  
+        circle = e;  
+        var radius= parseInt(e.getRadius()); //检索半径必须是整型  
+        var center= e.getCenter();  
+        drawingManager.close();  
+        if (customLayer) {  
+            map.removeTileLayer(customLayer);  
+        }  
+        localSearch.searchNearby(' ', center,radius,{customData:{databoxId: 4032}});//用新创建的databoxid替换该值  
+});
+</script>  
+</body>  
+</html>

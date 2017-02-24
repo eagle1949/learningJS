@@ -1,0 +1,98 @@
+<!DOCTYPE html>  
+<html>  
+<head>  
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />  
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<title>控件</title>  
+<style type="text/css">  
+html{height:100%}  
+body{height:100%;margin:0px;padding:0px}  
+#container{height:100%}  
+</style>  
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=le80IdXynXVOfDwwoHh8OK7FqLm10EaQ">
+//v2.0版本的引用方式：src="http://api.map.baidu.com/api?v=2.0&ak=您的密钥"
+//v1.4版本及以前版本的引用方式：src="http://api.map.baidu.com/api?v=1.4&key=您的密钥&callback=initialize"
+</script>
+</head>  
+ 
+<body>  
+<div id="container"></div> 
+<script type="text/javascript"> 
+var map = new BMap.Map("container");    
+map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);    
+//地图平移缩放控件，PC端默认位于地图左上方，它包含控制地图的平移和缩放的功能。移动端提供缩放控件，默认位于地图右下方。
+//anchor 位置，offset偏移
+var opts = {type: BMAP_NAVIGATION_CONTROL_SMALL, anchor: BMAP_ANCHOR_TOP_LEFT,offset: new BMap.Size(150, 5)} 
+map.addControl(new BMap.NavigationControl(opts));
+
+//OverviewMapControl：缩略地图控件，默认位于地图右下方，是一个可折叠的缩略地图。
+map.addControl(new BMap.OverviewMapControl());
+
+//ScaleControl：比例尺控件，默认位于地图左下方，显示地图的比例关系。
+map.addControl(new BMap.ScaleControl());   
+
+//MapTypeControl：地图类型控件，默认位于地图右上方。
+map.addControl(new BMap.MapTypeControl());    
+map.setCurrentCity("北京"); // 仅当设置城市信息时，MapTypeControl的切换功能才能可用
+
+//CopyrightControl：版权控件，默认位于地图左下方。
+map.addControl(new BMap.CopyrightControl());
+
+//GeolocationControl：定位控件，针对移动端开发，默认位于地图左下方。
+map.addControl(new BMap.GeolocationControl());
+
+
+
+// 定义一个控件类，即function    
+function ZoomControl(){    
+    // 设置默认停靠位置和偏移量  
+    this.defaultAnchor = BMAP_ANCHOR_TOP_LEFT;    
+    this.defaultOffset = new BMap.Size(10, 10);    
+}    
+// 通过JavaScript的prototype属性继承于BMap.Control   
+ZoomControl.prototype = new BMap.Control();
+	// 自定义控件必须实现initialize方法，并且将控件的DOM元素返回   
+// 在本方法中创建个div元素作为控件的容器，并将其添加到地图容器中   
+ZoomControl.prototype.initialize = function(map){    
+	// 创建一个DOM元素   
+	 var div = document.createElement("div");    
+	// 添加文字说明    
+	 div.appendChild(document.createTextNode("放大2级"));       
+	 // 设置样式    
+	 div.style.cursor = "pointer";    
+	 div.style.border = "1px solid gray";    
+	 div.style.backgroundColor = "white";    
+	 // 绑定事件，点击一次放大两级    
+	 div.onclick = function(e){  
+		 map.zoomTo(map.getZoom() + 2);    
+	 }     
+	 // 添加DOM元素到地图中   
+	 map.getContainer().appendChild(div);  
+	 // 将DOM元素返回  
+	 return div;    
+ }
+ZoomControl.prototype.initialize = function(map){    
+	// 创建一个DOM元素   
+	 var div = document.createElement("div");    
+	// 添加文字说明    
+	 div.appendChild(document.createTextNode("放大1级"));       
+	 // 设置样式    
+	 div.style.cursor = "pointer";    
+	 div.style.border = "1px solid gray";    
+	 div.style.backgroundColor = "white";    
+	 // 绑定事件，点击一次放大两级    
+	 div.onclick = function(e){  
+		 map.zoomTo(map.getZoom() + 1);    
+		 var div1
+	 }     
+	 // 添加DOM元素到地图中   
+	 map.getContainer().appendChild(div);  
+	 // 将DOM元素返回  
+	 return div;    
+ }
+// 创建控件实例    
+var myZoomCtrl = new ZoomControl();
+map.addControl(myZoomCtrl);
+</script>  
+</body>  
+</html>
